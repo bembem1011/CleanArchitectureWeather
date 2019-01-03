@@ -1,0 +1,88 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+        google()
+        maven { url "https://jitpack.io" }
+    }
+}
+
+android {
+    def globalConfiguration = rootProject.ext.globalConfiguration
+
+    compileSdkVersion globalConfiguration.compile_sdk
+    defaultConfig {
+        applicationId globalConfiguration.application_id
+        minSdkVersion globalConfiguration.min_sdk
+        targetSdkVersion globalConfiguration.target_sdk
+        versionCode globalConfiguration.version_code
+        versionName globalConfiguration.version_name
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+        exclude 'META-INF/INDEX.LIST'
+    }
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+    sourceSets.main {
+        java.srcDir "src/main/java"
+        java.srcDir "src/main/kotlin"
+        res.srcDir "src/main/res"
+        manifest.srcFile "src/main/AndroidManifest.xml"
+    }
+}
+
+dependencies {
+    def androidDependencies = rootProject.ext.androidDependencies
+
+    implementation project(':domain')
+    implementation project(':data')
+
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    implementation androidDependencies.app_compat
+    implementation androidDependencies.constraint_layout
+    implementation androidDependencies.recyclerview
+    implementation androidDependencies.cardview
+
+    implementation androidDependencies.glide_run_time
+    annotationProcessor androidDependencies.glide_compiler
+    kapt androidDependencies.glide_compiler
+
+    implementation androidDependencies.butterknife_runtime
+    annotationProcessor androidDependencies.butterknife_compiler
+    kapt androidDependencies.butterknife_compiler
+
+    implementation androidDependencies.rxjava
+    implementation androidDependencies.rxandroid
+
+    implementation androidDependencies.arch_lifcycle
+
+    implementation androidDependencies.multidex
+
+    implementation androidDependencies.kotlin
+    implementation androidDependencies.rxkotlin
+
+    testImplementation androidDependencies.junit
+    androidTestImplementation androidDependencies.runner
+    androidTestImplementation androidDependencies.expresso
+}
+repositories {
+    mavenCentral()
+}

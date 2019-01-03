@@ -1,0 +1,138 @@
+
+def deps = [:]
+
+def versions = [:]
+versions.support = "28.0.0-alpha1"
+versions.constraint_layout = "1.1.0"
+versions.junit = "4.12"
+versions.runner = "1.0.2"
+versions.expresso = "3.0.2"
+versions.glide = "4.7.1"
+versions.butterknife = "8.8.1"
+versions.rxJava = '2.1.1'
+versions.rxAndroid = "2.0.1"
+versions.room = "1.0.0"
+versions.lifecycle = "1.1.1"
+versions.retrofit = "2.4.0"
+versions.okhttp3 = "3.10.0"
+versions.okhttp3_logging = "3.9.1"
+versions.multidex = "1.0.3"
+versions.kotlin = "1.3.11"
+versions.rxkotlin = "2.0.0-RC1"
+
+def support = [:]
+support.annotations = "com.android.support:support-annotations:$versions.support"
+support.app_compat = "com.android.support:appcompat-v7:$versions.support"
+support.constraint_layout = "com.android.support.constraint:constraint-layout:$versions.constraint_layout"
+support.recyclerview = "com.android.support:recyclerview-v7:$versions.support"
+support.cardview = "com.android.support:cardview-v7:$versions.support"
+deps.support = support
+
+def testing = [:]
+testing.junit = "junit:junit:$versions.junit"
+testing.runner = "com.android.support.test:runner:$versions.runner"
+testing.expresso = "com.android.support.test.espresso:espresso-core:$versions.expresso"
+deps.testing = testing
+
+def glide = [:]
+glide.runtime = "com.github.bumptech.glide:glide:$versions.glide"
+glide.compiler = "com.github.bumptech.glide:compiler:$versions.glide"
+deps.glide = glide
+
+def butterknife = [:]
+butterknife.runtime = "com.jakewharton:butterknife:$versions.butterknife"
+butterknife.compiler = "com.jakewharton:butterknife-compiler:$versions.butterknife"
+deps.butterknife = butterknife
+
+def rx = [:]
+rx.java = "io.reactivex.rxjava2:rxjava:$versions.rxJava"
+rx.android = "io.reactivex.rxjava2:rxandroid:$versions.rxAndroid"
+rx.kotlin = "io.reactivex:rxkotlin:$versions.rxkotlin"
+deps.rx = rx
+
+
+def room = [:]
+room.runtime = "android.arch.persistence.room:runtime:$versions.room"
+room.compiler= "android.arch.persistence.room:compiler:$versions.room"
+
+def arch = [:]
+arch.room = room
+arch.lifecycle = "android.arch.lifecycle:extensions:$versions.lifecycle"
+deps.arch = arch
+
+def retrofit2 = [:]
+retrofit2.retrofit = "com.squareup.retrofit2:retrofit:$versions.retrofit"
+retrofit2.adapter_rxjava_2 = "com.squareup.retrofit2:adapter-rxjava2:$versions.retrofit"
+retrofit2.converter_gson= "com.squareup.retrofit2:converter-gson:$versions.retrofit"
+deps.retrofit2 = retrofit2
+
+def okhttp3 = [:]
+okhttp3.okhttp = "com.squareup.okhttp3:okhttp:$versions.okhttp3"
+okhttp3.okhttp3_logging = "com.squareup.okhttp3:logging-interceptor:$versions.okhttp3_logging"
+deps.okhttp3 = okhttp3
+
+def multidex = [:]
+multidex.multidex = "com.android.support:multidex:$versions.multidex"
+deps.multidex = multidex
+
+def kotlin = [:]
+kotlin.kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
+kotlin.gradle_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+deps.kotlin = kotlin
+
+ext.deps = deps
+
+ext.androidDependencies = [
+        app_compat:                 deps.support.app_compat,
+        constraint_layout:          deps.support.constraint_layout,
+        recyclerview:               deps.support.recyclerview,
+        cardview:                   deps.support.cardview,
+        junit:                      deps.testing.junit,
+        runner:                     deps.testing.runner,
+        expresso:                   deps.testing.expresso,
+        glide_run_time:             deps.glide.runtime,
+        glide_compiler:             deps.glide.compiler,
+        butterknife_runtime:        deps.butterknife.runtime,
+        butterknife_compiler:       deps.butterknife.compiler,
+        rxjava:                     deps.rx.java,
+        rxandroid:                  deps.rx.android,
+        arch_lifcycle:              deps.arch.lifecycle,
+        multidex:                   deps.multidex.multidex,
+        kotlin:                     deps.kotlin.kotlin,
+        rxkotlin:                   deps.rx.kotlin
+]
+ext.domainDependencies = [
+        kotlin:                     deps.kotlin.kotlin,
+        rxkotlin:                   deps.rx.kotlin
+]
+ext.dataDependencies = [
+        app_compat:                 deps.support.app_compat,
+        kotlin:                     deps.kotlin.kotlin,
+        rxkotlin:                   deps.rx.kotlin,
+        room_runtime:               deps.arch.room.runtime,
+        room_compiler:              deps.arch.room.compiler,
+        retrofit:                   deps.retrofit2.retrofit,
+        retrofit_adapter_rxjava_2:  deps.retrofit2.adapter_rxjava_2,
+        retrofit_converter_gson:    deps.retrofit2.converter_gson,
+        okhttp:                     deps.okhttp3.okhttp,
+        okhttp_logging:             deps.okhttp3.okhttp3_logging,
+        kotlin:                     deps.kotlin.kotlin,
+        junit:                      deps.testing.junit,
+        runner:                     deps.testing.runner
+]
+
+def globalConfiguration = [:]
+globalConfiguration.min_sdk = 19
+globalConfiguration.target_sdk = 28
+globalConfiguration.compile_sdk = 28
+globalConfiguration.application_id = "com.vng.clean.demo.cleanarchitecturedemo"
+globalConfiguration.build_tools = "27.0.3"
+globalConfiguration.version_code = 1
+globalConfiguration.version_name = "1.0"
+ext.globalConfiguration = globalConfiguration
+
+def addRepositories(RepositoryHandler handler) {
+    handler.google()
+    handler.jcenter()
+}
+ext.addRepositories = this.&addRepositories

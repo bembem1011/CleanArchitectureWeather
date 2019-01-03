@@ -1,0 +1,78 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    def globalConfiguration = rootProject.ext.globalConfiguration
+    compileSdkVersion globalConfiguration.compile_sdk
+
+    defaultConfig {
+        minSdkVersion globalConfiguration.min_sdk
+        targetSdkVersion globalConfiguration.target_sdk
+        versionCode globalConfiguration.version_code
+        versionName globalConfiguration.version_name
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        buildConfigField 'String', 'OPEN_WEATHER', '"https://api.openweathermap.org/"'
+        buildConfigField 'String', 'OPEN_WEATHER_API_KEY', '"9ad6b710400ef578507224e40763f0fc"'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
+
+    lintOptions {
+        quiet true
+        abortOnError false
+        ignoreWarnings true
+        disable 'InvalidPackage'            //Some libraries have issues with this.
+        disable 'OldTargetApi'              //Lint gives this warning but SDK 20 would be Android L Beta.
+        disable 'IconDensities'             //For testing purpose. This is safe to remove.
+        disable 'IconMissingDensityFolder'  //For testing purpose. This is safe to remove.
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    def dataDependencies = rootProject.ext.dataDependencies
+
+    implementation project(':domain')
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation dataDependencies.app_compat
+
+    implementation dataDependencies.room_runtime
+    annotationProcessor dataDependencies.room_compiler
+
+    // retrofit
+    implementation dataDependencies.retrofit
+    implementation dataDependencies.retrofit_adapter_rxjava_2
+    implementation dataDependencies.retrofit_converter_gson
+    // okhttp
+    implementation dataDependencies.okhttp
+    implementation dataDependencies.okhttp_logging
+
+    testImplementation dataDependencies.junit
+    androidTestImplementation dataDependencies.runner
+
+    implementation dataDependencies.kotlin
+    implementation dataDependencies.rxkotlin
+}
